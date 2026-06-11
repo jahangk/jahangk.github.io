@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frank (Jake) Hang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F7F6F3;
+      --surface:  #EEECEA;
+      --border:   #DDDBD6;
+      --text:     #1A1A18;
+      --muted:    #6B6A66;
+      --hint:     #9E9C98;
+      --accent:   #2D5BE3;
+      --accent-bg:#EBF0FD;
+      --radius:   6px;
+      --radius-lg:10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247,246,243,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 5vw, 2rem);
+    }
+
+    section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-child { border-bottom: none; }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--hint);
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    h3 {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* ── HERO ── */
+    #hero { padding-top: 5rem; }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+    .hero-bio {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    /* stat strip */
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      width: fit-content;
+    }
+    .stat {
+      padding: 0.85rem 1.5rem;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--text);
+      display: block;
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--hint);
+      font-weight: 400;
+      display: block;
+      margin-top: 3px;
+    }
+
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    .btn-dark {
+      background: var(--text);
+      color: var(--bg);
+      border: 1px solid var(--text);
+    }
+    .btn-dark:hover { opacity: 0.85; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--surface); }
+
+    /* ── SKILLS ── */
+    .skill-groups { display: flex; flex-direction: column; gap: 1.25rem; }
+    .skill-group-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--hint);
+      min-width: 120px;
+      padding-top: 4px;
+    }
+    .skill-group { display: flex; gap: 1.5rem; align-items: flex-start; }
+    .tag-list { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--surface);
+      font-weight: 400;
+    }
+    .tag.accent {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border-color: #c0cffa;
+    }
+
+    /* ── PROJECTS ── */
+    .project-list { display: flex; flex-direction: column; gap: 1px; }
+    .project-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 10px;
+      transition: border-color 0.15s;
+    }
+    .project-card:last-child { margin-bottom: 0; }
+    .project-card:hover { border-color: #bbb; }
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+    .project-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 1rem; }
+    .project-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .tag-econ { background: #EBF5EE; color: #1A5C35; border: 1px solid #b8dfc8; }
+    .tag-fin  { background: #FEF3E2; color: #7A4B0A; border: 1px solid #f5d5a0; }
+    .tag-data { background: var(--accent-bg); color: var(--accent); border: 1px solid #c0cffa; }
+    .tag-pol  { background: #F2EFFE; color: #4B2DAD; border: 1px solid #cec0f6; }
+
+    .project-link {
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+    .project-link:hover { text-decoration: underline; }
+    .project-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── EXPERIENCE ── */
+    .exp-list { display: flex; flex-direction: column; }
+    .exp-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--hint);
+      padding-top: 3px;
+    }
+    .exp-role { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .exp-org { font-size: 13px; color: var(--muted); margin-bottom: 0.5rem; }
+    .exp-bullets { list-style: none; padding: 0; }
+    .exp-bullets li {
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: 1rem;
+      position: relative;
+      margin-bottom: 3px;
+      line-height: 1.55;
+    }
+    .exp-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--hint);
+    }
+
+    /* ── FILES ── */
+    .file-list { display: flex; flex-direction: column; gap: 8px; }
+    .file-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: border-color 0.15s;
+    }
+    .file-row:hover { border-color: #bbb; }
+    .file-left { display: flex; align-items: center; gap: 12px; }
+    .file-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .file-icon svg { width: 16px; height: 16px; stroke: var(--muted); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .file-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 1px; }
+    .file-meta { font-size: 12px; color: var(--hint); }
+    .dl-btn {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px 12px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      transition: background 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .dl-btn:hover { background: var(--border); }
+    .dl-btn svg { width: 13px; height: 13px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── CONTACT ── */
+    #contact { border-bottom: none; }
+    .contact-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .contact-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .contact-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+    .contact-chip svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+
+    .footer {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      font-size: 12px;
+      color: var(--hint);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .exp-item { grid-template-columns: 1fr; gap: 0.25rem; }
+      .stat-strip { width: 100%; }
+      .stat { flex: 1; }
+      .skill-group { flex-direction: column; gap: 0.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-name">Jake Hang</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#files">Files</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main class="page">
+
+  <!-- HERO -->
+  <section id="hero">
+    <span class="eyebrow">Economics &amp; Finance · University of Melbourne</span>
+    <h1>Frank (Jake) Hang</h1>
+    <p class="hero-subtitle">Quantitative analyst &amp; economics graduate</p>
+    <p class="hero-bio">
+      Incoming BCom graduate specialising in econometrics, applied economic analysis, and quantitative finance.
+      Interested in graduate roles in economic policy, research, and data analytics in Melbourne.
+    </p>
+
+    <div class="stat-strip">
+      <div class="stat">
+        <span class="stat-num">3</span>
+        <span class="stat-label">years BCom</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2</span>
+        <span class="stat-label">majors</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">3</span>
+        <span class="stat-label">projects</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <!-- Update href to your actual CV file path once hosted -->
+      <a href="files/resume-jake-hang.pdf" download class="btn btn-dark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download CV
+      </a>
+      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <span class="eyebrow">Skills</span>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <span class="skill-group-label">Econometrics</span>
+        <div class="tag-list">
+          <span class="tag accent">OLS / IV / 2SLS</span>
+          <span class="tag accent">Panel data</span>
+          <span class="tag accent">VAR / ARIMAX</span>
+          <span class="tag accent">Asymptotic theory</span>
+          <span class="tag accent">Time series</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-label">Finance</span>
+        <div class="tag-list">
+          <span class="tag">Fixed income</span>
+          <span class="tag">Portfolio theory (MPT)</span>
+          <span class="tag">Asset pricing</span>
+          <span class="tag">Covariance shrinkage</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-label">Tools</span>
+        <div class="tag-list">
+          <span class="tag">R</span>
+          <span class="tag">Python</span>
+          <span class="tag">Stata</span>
+          <span class="tag">Excel</span>
+          <span class="tag">Git</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-label">Policy</span>
+        <div class="tag-list">
+          <span class="tag">Economic policy analysis</span>
+          <span class="tag">Program evaluation</span>
+          <span class="tag">NDIS / social policy</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <span class="eyebrow">Projects</span>
+
+    <div class="project-list">
+
+      <div class="project-card">
+        <div class="project-header">
+          <h2>CS2 portfolio optimisation</h2>
+          <!-- Update href to your GitHub repo or write-up -->
+          <a href="#" class="project-link">GitHub →</a>
+        </div>
+        <p class="project-desc">
+          Applied Modern Portfolio Theory to investment-grade CS2 cosmetic items (discontinued cases and sticker capsules).
+          Built ARIMAX price forecasts, estimated the covariance matrix with Ledoit-Wolf shrinkage, and solved a long-only
+          quadratic optimisation problem. Evaluated strategy with a walk-forward backtest in R.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag tag-fin">Quantitative finance</span>
+          <span class="project-tag tag-data">R</span>
+          <span class="project-tag tag-data">Optimisation</span>
+          <span class="project-tag tag-data">Time series</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <h2>Gender &amp; educational attainment in Tanzania</h2>
+          <!-- Update href to your report PDF -->
+          <a href="files/tanzania-report.pdf" class="project-link">Report →</a>
+        </div>
+        <p class="project-desc">
+          Empirical analysis of the gender gap in years of schooling using World Bank NPS Wave 5 cross-sectional data.
+          Estimated OLS and IV/2SLS models in R, identified a sign reversal in the female coefficient across age subsamples,
+          and assessed structural limitations of cross-sectional data for decomposing cumulative outcome variables.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag tag-econ">Econometrics</span>
+          <span class="project-tag tag-data">R</span>
+          <span class="project-tag tag-econ">IV / 2SLS</span>
+          <span class="project-tag tag-econ">Development economics</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <h2>NDIA policy analysis</h2>
+          <a href="#" class="project-link">Write-up →</a>
+        </div>
+        <p class="project-desc">
+          Research brief on the October 2024 NDIS legislative reforms and the I-CAN v6 planning framework.
+          Assessed implications for participant outcomes, planner decision-making, and program sustainability.
+          Prepared as part of the NDIA Graduate Program application (Policy, Research &amp; Economics stream).
+        </p>
+        <div class="project-tags">
+          <span class="project-tag tag-pol">Policy analysis</span>
+          <span class="project-tag tag-pol">Social policy</span>
+          <span class="project-tag tag-econ">Program evaluation</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <span class="eyebrow">Experience &amp; Education</span>
+    <div class="exp-list">
+
+      <div class="exp-item">
+        <span class="exp-date">2026</span>
+        <div>
+          <p class="exp-role">Graduate applicant — Policy, Research &amp; Economics</p>
+          <p class="exp-org">National Disability Insurance Agency (NDIA)</p>
+          <ul class="exp-bullets">
+            <li>Applied to the NDIA Graduate Program (Policy, Research, Economics &amp; Finance stream)</li>
+            <li>Prepared written responses and STAR-format behavioural interview materials</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <span class="exp-date">2023 – 2026</span>
+        <div>
+          <p class="exp-role">Bachelor of Commerce — Economics &amp; Finance</p>
+          <p class="exp-org">University of Melbourne</p>
+          <ul class="exp-bullets">
+            <li>Majors in Economics and Finance</li>
+            <li>Relevant coursework: Econometrics 1 &amp; 2, Investments &amp; Fixed Income, Macroeconomics, Financial Modelling</li>
+            <li>Advanced topics: IV/2SLS, panel data, VAR, ARIMAX, asymptotic theory</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FILES -->
+  <section id="files">
+    <span class="eyebrow">Files</span>
+    <div class="file-list">
+
+      <div class="file-row">
+        <div class="file-left">
+          <div class="file-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <p class="file-name">Resume — Jake Hang</p>
+            <p class="file-meta">PDF · June 2026</p>
+          </div>
+        </div>
+        <!-- Update href to your actual file path -->
+        <a href="files/resume-jake-hang.pdf" download class="dl-btn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </a>
+      </div>
+
+      <div class="file-row">
+        <div class="file-left">
+          <div class="file-icon">
+            <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div>
+            <p class="file-name">CS2 portfolio optimisation — code &amp; report</p>
+            <p class="file-meta">ZIP · R scripts + write-up</p>
+          </div>
+        </div>
+        <a href="files/cs2-portfolio.zip" download class="dl-btn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </a>
+      </div>
+
+      <div class="file-row">
+        <div class="file-left">
+          <div class="file-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <p class="file-name">Gender &amp; education in Tanzania — report</p>
+            <p class="file-meta">PDF · ECOM30002 Econometrics 2</p>
+          </div>
+        </div>
+        <a href="files/tanzania-report.pdf" download class="dl-btn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <span class="eyebrow">Contact</span>
+    <h2 style="margin-bottom: 0.4rem;">Open to graduate roles in Melbourne</h2>
+    <p style="font-size: 14px; color: var(--muted); margin-bottom: 1.75rem;">
+      Economics consulting · Policy research · Data analytics · Boutique finance
+    </p>
+    <div class="contact-grid">
+      <!-- Update all hrefs with your real details -->
+      <a href="mailto:your@email.com" class="contact-chip">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        your@email.com
+      </a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener" class="contact-chip">
+        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/yourusername" target="_blank" rel="noopener" class="contact-chip">
+        <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <div class="contact-chip" style="cursor: default;">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Melbourne, VIC
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer page">
+  <p>Built with HTML &amp; CSS · Hosted on GitHub Pages</p>
+</footer>
+
+</body>
+</html>
