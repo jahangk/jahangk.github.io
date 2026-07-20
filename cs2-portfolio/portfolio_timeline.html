@@ -205,7 +205,7 @@
   }
   .timeline{
     position:relative;
-    height:64px;
+    height:78px;
     display:flex;
     align-items:center;
   }
@@ -241,10 +241,13 @@
     position:absolute;
     top:22px;
     font-family:'IBM Plex Mono',monospace;
-    font-size:10px;
+    font-size:9.5px;
     color:var(--text-dim);
     transform:translateX(-50%);
     white-space:nowrap;
+  }
+  .tnode-date.stagger{
+    top:36px;
   }
   .scrub-hint{
     text-align:center;
@@ -545,17 +548,33 @@ function render(){
 function buildTimeline(){
   const frames = currentFrames();
   timelineNodes.innerHTML = '';
+  // With up to 20 rebalance dates in one row, showing every label causes
+  // them to overlap (each "YYYY-MM-DD" label is wider than the spacing
+  // between nodes). Show every other label, always show the active one
+  // regardless of its position in that pattern, and stagger the shown
+  // labels between two vertical offsets for extra breathing room. Every
+  // dot still carries the full date as a hover tooltip, so no date is
+  // ever fully hidden — just not always shown as a permanent label.
+  const showEvery = frames.length > 12 ? 2 : 1;
   frames.forEach((frame,i)=>{
     const wrap = document.createElement('div');
     wrap.style.position='relative';
     const node = document.createElement('div');
     node.className = 'tnode' + (i===currentIndex ? ' active':'');
+    node.title = frame.date;
     node.addEventListener('click', ()=>{ currentIndex=i; buildTimeline(); render(); });
-    const label = document.createElement('div');
-    label.className = 'tnode-date';
-    label.textContent = frame.date;
     wrap.appendChild(node);
-    wrap.appendChild(label);
+
+    const shouldLabel = (i % showEvery === 0) || (i === currentIndex);
+    if(shouldLabel){
+      const label = document.createElement('div');
+      label.className = 'tnode-date';
+      if(showEvery > 1 && (Math.floor(i / showEvery) % 2 === 1) && i !== currentIndex){
+        label.classList.add('stagger');
+      }
+      label.textContent = frame.date;
+      wrap.appendChild(label);
+    }
     timelineNodes.appendChild(wrap);
   });
 }
