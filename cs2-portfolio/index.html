@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS2 Portfolio Research — Frank Jake Hang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d12;
+    --surface:#12151c;
+    --surface2:#171b24;
+    --text:#e8e9ed;
+    --text-dim:#8b93a3;
+    --line:#232834;
+    --blue:#4b69ff;
+    --purple:#8847ff;
+    --pink:#d32ee6;
+    --red:#eb4b4b;
+    --gold:#e8b923;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .rarity-bar{
+    height:4px;
+    width:100%;
+    background:linear-gradient(90deg,var(--blue) 0 20%,var(--purple) 20% 40%,var(--pink) 40% 60%,var(--red) 60% 80%,var(--gold) 80% 100%);
+  }
+  .backlink{
+    max-width:880px;
+    margin:0 auto;
+    padding:20px 24px 0;
+  }
+  .backlink a{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:var(--text-dim);
+    text-decoration:none;
+  }
+  .backlink a:hover{color:var(--gold);}
+  header{
+    max-width:880px;
+    margin:0 auto;
+    padding:56px 24px 20px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:18px;
+  }
+  h1{
+    font-size:clamp(30px,4.6vw,44px);
+    line-height:1.15;
+    font-weight:700;
+    margin:0 0 20px;
+    letter-spacing:-0.02em;
+  }
+  header p{
+    font-size:17px;
+    color:var(--text-dim);
+    max-width:640px;
+    margin:0;
+  }
+  main{
+    max-width:880px;
+    margin:0 auto;
+    padding:36px 24px 90px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:30px;
+    text-decoration:none;
+    color:var(--text);
+    display:flex;
+    flex-direction:column;
+    transition:border-color 0.15s, transform 0.15s;
+  }
+  .card:hover{
+    border-color:var(--gold);
+    transform:translateY(-2px);
+  }
+  .card .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  .card h2{
+    font-size:22px;
+    font-weight:700;
+    margin:0 0 12px;
+    letter-spacing:-0.01em;
+  }
+  .card p{
+    font-size:14.5px;
+    color:var(--text-dim);
+    margin:0 0 20px;
+    flex-grow:1;
+  }
+  .card .cta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .card:hover .cta{color:var(--gold);}
+  .card .arrow{transition:transform 0.15s;}
+  .card:hover .arrow{transform:translateX(3px);}
+  @media (max-width:640px){
+    main{grid-template-columns:1fr;}
+  }
+  footer{
+    max-width:880px;
+    margin:0 auto;
+    padding:0 24px 60px;
+    color:var(--text-dim);
+    font-size:13px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  footer a{color:var(--gold); text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="rarity-bar"></div>
+
+<div class="backlink"><a href="https://jakehang.github.io">← jakehang.github.io</a></div>
+
+<header>
+  <div class="eyebrow">Portfolio Research — CS2 Item Markets</div>
+  <h1>Supply elasticity, not sophistication, decides whether active management beats buy-and-hold</h1>
+  <p>A walk-forward backtest of Modern Portfolio Theory across ~230 CS2 cases and sticker capsules. Two ways into the same research below.</p>
+</header>
+
+<main>
+  <a class="card" href="writeup.html">
+    <div class="tag">Read</div>
+    <h2>The Write-Up</h2>
+    <p>Full findings, the methodology behind each strategy, three debugging stories that shaped the result, and what an intelligent investor would actually hold today.</p>
+    <div class="cta">Open the write-up <span class="arrow">→</span></div>
+  </a>
+
+  <a class="card" href="portfolio_timeline.html">
+    <div class="tag">Explore</div>
+    <h2>Portfolio Timeline</h2>
+    <p>Scrub through every rebalance date and watch each strategy's actual top-10 holdings, with real 6-month, 1-year, and 2-year returns benchmarked against the index.</p>
+    <div class="cta">Open the timeline <span class="arrow">→</span></div>
+  </a>
+</main>
+
+<footer>
+  <div>Frank Jake Hang — Bachelor of Commerce (Economics &amp; Finance), University of Melbourne</div>
+  <div style="margin-top:8px;">
+    <a href="https://jakehang.github.io">jakehang.github.io</a> ·
+    <a href="https://github.com/jahangk">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
