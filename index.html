@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -397,7 +397,7 @@
   <section id="hero">
     <span class="eyebrow">Economics &amp; Finance · University of Melbourne</span>
     <h1>Frank (Jake) Hang</h1>
-    <p class="hero-subtitle">Quantitative analyst &amp; economics graduate</p>
+    <p class="hero-subtitle">Quantitative analysis &amp; economics & finance graduate</p>
     <p class="hero-bio">
       Incoming BCom graduate specialising in econometrics, applied economic analysis, and quantitative finance.
       Interested in graduate roles in economic policy, research, and data analytics in Melbourne.
@@ -413,7 +413,7 @@
         <span class="stat-label">majors</span>
       </div>
       <div class="stat">
-        <span class="stat-num">3</span>
+        <span class="stat-num">4</span>
         <span class="stat-label">projects</span>
       </div>
     </div>
@@ -456,7 +456,6 @@
         <div class="tag-list">
           <span class="tag">R</span>
           <span class="tag">Python</span>
-          <span class="tag">Stata</span>
           <span class="tag">Excel</span>
           <span class="tag">Git</span>
         </div>
@@ -466,7 +465,7 @@
         <div class="tag-list">
           <span class="tag">Economic policy analysis</span>
           <span class="tag">Program evaluation</span>
-          <span class="tag">NDIS / social policy</span>
+          <span class="tag">NDA / Public policy</span>
         </div>
       </div>
     </div>
@@ -486,8 +485,7 @@
         </div>
         <p class="project-desc">
           Applied Modern Portfolio Theory to investment-grade CS2 cosmetic items (discontinued cases and sticker capsules).
-          Built ARIMAX price forecasts, estimated the covariance matrix with Ledoit-Wolf shrinkage, and solved a long-only
-          quadratic optimisation problem. Evaluated strategy with a walk-forward backtest in R.
+          Using public trading history to retroactively compare various portfolio constructions (Index, Markowitz, Sharpe, Sortino, Momentum) in the CS2 asset universe. Evaluated strategies with a walk-forward backtest in R.
         </p>
         <div class="project-tags">
           <span class="project-tag tag-fin">Quantitative finance</span>
@@ -496,22 +494,21 @@
           <span class="project-tag tag-data">Time series</span>
         </div>
       </div>
-      
-<div class="project-card">
+  <div class="project-card">
   <div class="project-header">
-    <h2>Singapore Government Securities yield curve analysis</h2>
-    <a href="files/sgs-yield-curve.pdf" download class="project-link">Read PDF →</a>
+    <h2>NDQ vs XNT: a portfolio diversification case study</h2>
+    <a href="files/ndq-xnt-analysis.pdf" download class="project-link">Read PDF →</a>
   </div>
   <p class="project-desc">
-    Analyses the current shape and 12-month evolution of the SGS yield curve, showing a re-steepening driven by MAS's twice-easing of the S$NEER policy band in 2025 — the 2-year yield fell 102.6bp against a 57.1bp decline at the 10-year. Decomposes the -217.9bp SGS/US 10-year spread using the Fisher equation into inflation and real-rate components, and links Singapore's 2-year yields to Fed policy via monetary spillover and interest rate arbitrage, alongside a flight-to-safety effect from deteriorating US fiscal metrics.
+    Evaluates whether adding BetaShares NASDAQ 100 ETF (NDQ) improves an Australia-focused equity portfolio benchmarked against XNT. Estimates a 24-month rolling CAPM beta (0.935, R² = 0.881), and benchmarks NDQ's NAV tracking efficiency (0.09% premium) against Invesco's US-listed QQQ. Recommends NDQ as a diversification holding on the basis of underrepresented US tech exposure, despite higher volatility and valuation risk.
   </p>
   <div class="project-tags">
-    <span class="project-tag tag-fin">Fixed income</span>
-    <span class="project-tag tag-fin">Monetary policy</span>
-    <span class="project-tag tag-data">Yield curve analysis</span>
+    <span class="project-tag tag-fin">CAPM</span>
+    <span class="project-tag tag-fin">Portfolio diversification</span>
+    <span class="project-tag tag-data">R</span>
   </div>
-</div>
-      
+</div>    
+
       <div class="project-card">
         <div class="project-header">
           <h2>Gender &amp; educational attainment in Tanzania</h2>
@@ -521,7 +518,7 @@
         <p class="project-desc">
           Empirical analysis of the gender gap in years of schooling using World Bank NPS Wave 5 cross-sectional data.
           Estimated OLS and IV/2SLS models in R, identified a sign reversal in the female coefficient across age subsamples,
-          and assessed structural limitations of cross-sectional data for decomposing cumulative outcome variables.
+          and assessed structural limitations of cross-sectional data for decomposing cumulative causal effects.
         </p>
         <div class="project-tags">
           <span class="project-tag tag-econ">Econometrics</span>
@@ -544,7 +541,20 @@
     <span class="project-tag tag-econ">Housing policy</span>
   </div>
 </div>
-
+<div class="project-card">
+  <div class="project-header">
+    <h2>Singapore Government Securities yield curve analysis</h2>
+    <a href="files/sgs-yield-curve.pdf" download class="project-link">Read PDF →</a>
+  </div>
+  <p class="project-desc">
+    Analyses the current shape and 12-month evolution of the SGS yield curve; decomposing the SGS/US 10-year spread using the Fisher equation into inflation and real-rate components. Links yield curve behaviour to government policy and current events.  </p>
+  <div class="project-tags">
+    <span class="project-tag tag-fin">Fixed income</span>
+    <span class="project-tag tag-fin">Monetary policy</span>
+    <span class="project-tag tag-data">Yield curve analysis</span>
+  </div>
+</div>
+      
     </div>
   </section>
 
