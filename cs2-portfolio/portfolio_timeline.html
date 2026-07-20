@@ -194,9 +194,31 @@
   }
   circle.bubble{
     cursor:pointer;
-    transition:opacity 0.2s;
+    transition:opacity 0.2s, stroke 0.2s;
   }
-  circle.bubble:hover{opacity:0.82;}
+  circle.bubble:hover{
+    opacity:0.82;
+    stroke:var(--gold);
+  }
+  .bubble-tooltip{
+    position:fixed;
+    pointer-events:none;
+    background:#07080b;
+    border:1px solid var(--gold);
+    color:var(--gold);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    font-weight:500;
+    padding:5px 10px;
+    border-radius:6px;
+    z-index:50;
+    opacity:0;
+    transform:translate(-50%, -130%);
+    transition:opacity 0.12s;
+    white-space:nowrap;
+    box-shadow:0 4px 12px rgba(0,0,0,0.4);
+  }
+  .bubble-tooltip.visible{opacity:1;}
 
   .timeline-wrap{
     max-width:1100px;
@@ -270,7 +292,7 @@
 
 <header>
   <h1>Portfolio Composition Over Time</h1>
-  <p>Top 10 holdings by weight at each rebalance date, from the actual backtest. Circle size = portfolio weight. Color = illustrative rarity tier (hashed from item name — real per-item rarity metadata wasn't in the export, so treat color as a visual distinguisher, not ground truth).</p>
+  <p>Top 10 holdings by weight at each rebalance date, from the actual backtest. Circle size = portfolio weight. Color = illustrative rarity tier (hashed from item name — real per-item rarity metadata wasn't in the export, so treat color as a visual distinguisher, not ground truth). Click any bubble to open that item's Steam Community Market listing in a new tab.</p>
 </header>
 
 <div class="controls">
@@ -305,6 +327,7 @@
       <tbody id="returnsTableBody"></tbody>
     </table>
     <svg id="stage-svg" viewBox="0 0 900 560"></svg>
+    <div class="bubble-tooltip" id="bubbleTooltip">View on Market ↗</div>
   </div>
 </div>
 
@@ -448,6 +471,7 @@ function packCircles(nodes, cx, cy, iterations=240){
    Rendering
    ============================================================ */
 const svg = document.getElementById('stage-svg');
+const bubbleTooltip = document.getElementById('bubbleTooltip');
 const stageLabel = document.getElementById('stageLabel');
 const stageDate = document.getElementById('stageDate');
 const returnsTableBody = document.getElementById('returnsTableBody');
@@ -504,7 +528,32 @@ function render(){
 
   svg.innerHTML = '';
   nodes.forEach(n=>{
-    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    // Link each bubble to its Steam Community Market listing. 730 is CS2's
+    // Steam app ID; Steam's market accepts the item name URL-encoded
+    // directly in the path (encodeURIComponent handles spaces, "|", "()",
+    // etc. correctly for this).
+    const steamUrl = `https://steamcommunity.com/market/listings/730/${encodeURIComponent(n.item)}`;
+    const g = document.createElementNS('http://www.w3.org/2000/svg','a');
+    g.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', steamUrl);
+    g.setAttribute('href', steamUrl);
+    g.setAttribute('target', '_blank');
+    g.setAttribute('rel', 'noopener noreferrer');
+
+    // Custom tooltip follows the cursor using fixed/screen coordinates
+    // (clientX/clientY), sidestepping the need to convert SVG viewBox
+    // coordinates into rendered pixel coordinates, which would otherwise
+    // require accounting for how the browser scales the 900x560 viewBox
+    // to the stage's actual rendered size.
+    g.addEventListener('mouseenter', () => {
+      bubbleTooltip.classList.add('visible');
+    });
+    g.addEventListener('mousemove', (e) => {
+      bubbleTooltip.style.left = e.clientX + 'px';
+      bubbleTooltip.style.top = e.clientY + 'px';
+    });
+    g.addEventListener('mouseleave', () => {
+      bubbleTooltip.classList.remove('visible');
+    });
 
     const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
     circle.setAttribute('class','bubble');
