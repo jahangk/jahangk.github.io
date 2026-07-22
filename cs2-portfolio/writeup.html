@@ -242,7 +242,7 @@
 <header>
   <div class="eyebrow">Portfolio Research — CS2 Item Markets</div>
   <h1>Supply elasticity, not sophistication, decides whether active management beats buy-and-hold</h1>
-  <p class="lede">A walk-forward backtest of Modern Portfolio Theory across ~230 CS2 cases and sticker capsules finds that the winning strategy flips entirely depending on whether an asset's supply is fixed or ongoing — a pattern that maps directly onto momentum and collectibles literature from equity markets.</p>
+  <p class="lede">A walk-forward backtest of Modern Portfolio Theory across ~230 CS2 cases and sticker capsules finds the winning strategy flips entirely depending on whether an asset's supply is fixed or ongoing reflective of literature on momentum and equity markets.</p>
   <div class="meta">
     <span>231-asset universe</span>
     <span>2014–2026</span>
@@ -255,13 +255,13 @@
 
 <section>
   <h2>The finding</h2>
-  <p>Six candidate strategies — equal weight, Sharpe-weighted, Sortino-weighted, Markowitz tangency (mean-variance optimization), a trailing-momentum tilt, and a passive cap-weighted index — were backtested on 6-month forward returns across 20 non-overlapping rebalance windows (2016–2025), on three overlapping universes: all 242 investable items, 38 cases only, and 192 sticker capsules only.</p>
+  <p>Six strategies: equal weight, Sharpe-weighted, Sortino-weighted, Markowitz tangency (mean-variance optimization), a trailing-momentum tilt, and a passive cap-weighted index. Strategies were backtested on 6-month forward returns across 20 non-overlapping rebalance windows (2016–2025), on three overlapping universes: all 242 investable items, 38 cases only, and 192 sticker capsules only.</p>
 
   <div class="callout finding">
-    <p><strong>The ranking of every strategy inverts depending on the universe.</strong> The passive index dominates in capsules and the full universe. Momentum dominates in cases. Neither is close, and the reversal is total — not a matter of degree.</p>
+    <p><strong>Strategy performance inverts depending on the universe.</strong> The passive index dominates in capsules and the full universe. The momentum portfolio dominates in the cases-only universe.</p>
   </div>
-
-  <p>The explanation isn't randomness. Cases are reissued continuously; capsules are sold once, during a single Major, and never again. That single structural difference in supply elasticity is enough to flip which century-old finance heuristic applies.</p>
+  <h2>Introduction into the CS2 Market</h2>
+  <p>The CS:GO/CS2 Market is a universe of tradable items, with a large variety of cosmetic items priced through player demand. This study looks at items considered "sensible" investments (items in which supply does not continuously outgrow demand; such as most cosmetic items). Investment culture in the community reflects this: mainly investing in Cases and Capsules, consumable items that disappear when opened and grant the player a random cosmetic item from its specific collection. Cases are randomly dropped whilst playing, sticker capsules are on sale for fixed periods. Cases enter the investable universe once they move from the common to the rare drop pool, and sticker capsules are included after their sale ends. </p>
 </section>
 
 <section class="wide">
@@ -280,7 +280,7 @@
 
   <span class="universe-tag tag-capsules">Capsules only — 192 items</span>
   <table>
-    <tr><th>Strategy</th><th>Mean ret.</th><th>Sharpe (ann.)</th><th>Total ret.</th></tr>
+    <tr><th>Strategy</th><th>Mean return (log)</th><th>Sharpe (ann.)</th><th>Avg yearly return</th></tr>
     <tr class="best"><td>Index (buy &amp; hold)</td><td>0.1903</td><td>0.6199</td><td>21.0%</td></tr>
     <tr><td>Equal weight</td><td>0.1792</td><td><strong>1.0777</strong></td><td>19.6%</td></tr>
     <tr><td>SR expanding</td><td>0.1493</td><td>0.8528</td><td>16.1%</td></tr>
