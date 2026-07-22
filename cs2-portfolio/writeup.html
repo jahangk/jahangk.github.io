@@ -297,17 +297,23 @@
 <section>
   <h2>Why cases and capsules diverge</h2>
 
+  <p>The six strategies differ in one specific way across rebalances: some <strong>chase</strong> whatever just went up (momentum re-buys the recent winner every period), some <strong>correct away</strong> from it (equal weight and MVO reset toward a neutral target each time), and the index cap-weight formula happens to passively track organic price drift. Cases reward the chasing rule, capsules punish it and reward the correcting.</p>
+
   <div class="sleeve-cards">
     <div class="sleeve-card cases">
-      <h4>Cases — elastic supply</h4>
+      <h4>Cases — momentum's mechanism wins</h4>
       <div class="big mono">Trend persists</div>
-      <p>Continuous reissue means price growth reflects genuine, slow-diffusing demand (case-opening culture, player base growth) rather than a supply shock. A large, unsophisticated buyer base underreacts to news, so momentum has room to continue rather than immediately revert.</p>
+      <p>Momentum is the strongest performer here in both raw returns and Sharpe Ratio: "keep buying whatever just won." This strategy pays off if trends genuinely persist, so its win is itself evidence of persistence. Two candidate explanations exist for <em>why</em> it persists: continuous case reissue means price growth isn't fully capped by scarcity, and/or case demand comes from a broad, unsophisticated (and mostly non-investor) player base that underreacts to news, giving a Jegadeesh–Titman-style momentum window.</p>
     </div>
     <div class="sleeve-card capsules">
-      <h4>Capsules — fixed supply</h4>
+      <h4>Capsules — the correcting rule wins</h4>
       <div class="big mono">Trend reverts</div>
-      <p>Sold only during a single Major, never reissued. Prices spike on short-lived hype (a team's run, a streamer's coverage) in a thin, illiquid market, then revert once attention fades — a textbook attention-driven overreaction, distinct from any slower long-run scarcity trend underneath it.</p>
+      <p>Momentum is the <em>worst</em> performer in this universe: re-buying recent winners means systematically buying at the tail of tournament-driven hype spikes right before they partially revert. Equal weight actively sells down whatever just spiked and has the best Sharpe ratio of any strategy in either universe. The index portfolio avoids momentum's timing mistake but doesn't correct equal weight either, so it captures a real long-run scarcity trend at the cost of extra volatility from riding out each spike.</p>
     </div>
+  </div>
+
+  <div class="callout caveat">
+    <p><strong>Open question, not a settled result:</strong> every case in this dataset has both ongoing supply <em>and</em> real consumption demand (players opening cases); every capsule has both fixed supply <em>and</em> collector/speculative demand. These two factors are confounded — the backtest can't tell you whether cases trend because supply is elastic, because demand is consumption-driven and slow-diffusing, or both. Two tests using data already collected here could help separate them: (1) checking whether cases that have been <em>retired</em> from the active drop pool — meaning their supply is now effectively fixed, same as a capsule — start reverting like capsules despite still being "cases," and (2) checking whether cheap, low-rarity capsules (plausibly bought partly for genuine in-game use) revert less than expensive, purely-collectible ones, despite both having identical fixed supply. Neither test has been run yet.</p>
   </div>
 
   <h3>Mapping to established theory</h3>
@@ -315,36 +321,26 @@
     <div class="theory-cell head">Finding</div>
     <div class="theory-cell head">Theoretical analogue</div>
 
-    <div class="theory-cell"><p>Momentum works in cases, crashes in capsules</p></div>
+    <div class="theory-cell"><p>Momentum's chase-the-winner rule wins in cases, is the worst performer in capsules</p></div>
     <div class="theory-cell"><p>Jegadeesh &amp; Titman (1993) 3–12mo momentum; Daniel &amp; Moskowitz document momentum crashes concentrated in thin, high-volatility regimes — exactly capsules' profile.</p></div>
 
-    <div class="theory-cell"><p>Buy-and-hold beats active rebalancing where supply is fixed</p></div>
-    <div class="theory-cell"><p>Mirrors why cap-weighted equity indices are hard to beat: a few structural winners drive most cumulative return; periodic rebalancing gives some of it back.</p></div>
+    <div class="theory-cell"><p>Equal weight's correct-toward-neutral rule has the best Sharpe ratio specifically in the capsule universe</p></div>
+    <div class="theory-cell"><p>Consistent with mean-reversion strategies outperforming in markets where price moves are partly sentiment/overreaction rather than persistent information — the mirror image of the momentum literature above.</p></div>
 
     <div class="theory-cell"><p>Index has the highest return <em>and</em> highest volatility in capsules</p></div>
-    <div class="theory-cell"><p>Amihud &amp; Mendelson — illiquidity/concentration premium. A raw-return edge earned via undiversified exposure isn't alpha, it's uncompensated risk.</p></div>
+    <div class="theory-cell"><p>Amihud &amp; Mendelson — illiquidity/concentration premium. A raw-return edge earned via undiversified, uncorrected exposure isn't alpha, it's uncompensated risk.</p></div>
 
     <div class="theory-cell"><p>Mean-variance optimization underperforms almost everywhere tested</p></div>
-    <div class="theory-cell"><p>Michaud's "Optimization Enigma" (1989) — MVO is an error maximizer; with ~20 observations against 38–242 assets, estimation noise dominates genuine signal out-of-sample.</p></div>
+    <div class="theory-cell"><p>Michaud's "Optimization Enigma" (1989) — MVO is an error maximizer; with ~20 observations against 38–242 assets, estimation noise dominates genuine signal out-of-sample. Also DeMiguel, Garlappi &amp; Uppal (2009): naive 1/N diversification is a surprisingly high bar that optimized strategies routinely fail to clear out-of-sample once estimation error is priced in.</p></div>
 
-    <div class="theory-cell"><p>Fixed-supply assets show boom-then-reversal</p></div>
-    <div class="theory-cell"><p>Alternative-asset literature (fine art, rare coins): passion assets show large scarcity premia <em>and</em> pronounced boom-bust cycles, with no supply-side dampening.</p></div>
+    <div class="theory-cell"><p>Fixed-supply assets show boom-then-reversal; whether this is about supply or about who's buying remains untested</p></div>
+    <div class="theory-cell"><p>Alternative-asset literature (fine art, rare coins) attributes this to scarcity itself; behavioral finance (Hong &amp; Stein underreaction/overreaction) attributes similar patterns to the composition of the buyer base. Both are live candidates here, not yet distinguished.</p></div>
   </div>
-</section>
-
-<section class="wide">
-  <h2>How the finding was actually reached</h2>
-  <p>Three separate methodological bugs were caught and fixed over the course of this project, each of which would have quietly inverted or hidden the real result if left unaddressed.</p>
-  <ol class="debug-list" style="list-style:none;">
-    <li><span class="num">01</span><div><strong>Numerically unstable covariance matrix.</strong><span> The original tangency-portfolio covariance used a fixed 1e-6 ridge, far too small to regularize a matrix built from fewer observations than assets. Replaced with a shrinkage estimator that guarantees a target condition number (κ ≤ 1000) via bisection, regardless of the observation-to-asset ratio.</span></div></li>
-    <li><span class="num">02</span><div><strong>Silent, non-random sample selection.</strong><span> An early fix (<code class="mono">complete.cases()</code>) required every one of 60+ assets to report a price in the same week — satisfied in only 9 of 17–20 rebalance dates. The "winning" rolling-MVO strategy was actually averaging over a cherry-picked subsample of easy windows. Rebuilt on pairwise-complete covariance so every window is used.</span></div></li>
-    <li><span class="num">03</span><div><strong>Parameter-sensitive conclusions.</strong><span> Re-running the fixed model at a looser shrinkage ceiling (κ ≤ 5000 instead of 1000) flipped the 6-month rolling-MVO ranking from last place to second. The rolling-window MVO variant was removed entirely rather than reporting a ranking that depended on an arbitrary regularization choice.</span></div></li>
-  </ol>
 </section>
 
 <section>
   <h2>What this implies for an actual portfolio</h2>
-  <p>The practical read is not "pick one strategy" — it's a two-sleeve allocation, with each sleeve run under the rule that wins in its own universe:</p>
+  <p>The results suggest a two-sleeve allocation is best, combining a momentum sleeve in the cases universe and an equal weight split in the capsules universe.:</p>
   <div class="sleeve-cards">
     <div class="sleeve-card cases">
       <h4>Cases sleeve</h4>
@@ -354,11 +350,11 @@
     <div class="sleeve-card capsules">
       <h4>Capsules sleeve</h4>
       <div class="big mono">Equal weight</div>
-      <p>No momentum tilt — chasing recent movers is the single worst-performing rule tested in this universe.</p>
+      <p>No momentum tilt as chasing recent movers is the poorest performing strategy in the capsules universe.</p>
     </div>
   </div>
   <div class="callout caveat">
-    <p><strong>Open caveats before acting on this:</strong> no transaction-cost adjustment has been applied (Steam Community Market's ~13–15% cut would erode any active-strategy edge disproportionately); the capital split between sleeves is a judgment call, not backtest-derived; and every number above rests on ~20 non-overlapping six-month windows per universe — directionally consistent with theory, not statistically proven at conventional confidence levels.</p>
+    <p><strong>Open caveats before acting on this:</strong> no transaction-cost adjustment has been applied (Steam Community Market's ~13–15% cut or third-party 2-5% cut); the capital split between sleeves is a judgment call, every number above rests on 20 non-overlapping six-month windows per universe, not statistically proven at conventional confidence levels.</p>
   </div>
 </section>
 
