@@ -291,7 +291,7 @@
 
 <header>
   <h1>Portfolio Composition Over Time</h1>
-  <p>Top 10 holdings by weight at each rebalance date, a visualisation of the ideal risky portfolio at the time, not the best performing portfolios in hindsight. Circle size = portfolio weight. Click any bubble to open that item's Steam Community Market listing in a new tab.</p>
+  <p>Top 10 holdings by weight at each rebalance date, a visualisation of the ideal risky portfolio at the time, not the best performing portfolios in hindsight. Long only (shorting doesn't exist in this universe), no borrowing. Circle size = portfolio weight. Click any bubble to open that item's Steam Community Market listing in a new tab.</p>
 </header>
 
 <div class="controls">
@@ -309,7 +309,7 @@
     <option value="index">Index</option>
   </select>
   <div class="legend">
-    <span class="color-note">Bubble color is decorative only </span>
+    <span class="color-note">Bubble colour is decorative only </span>
   </div>
 </div>
 
@@ -483,8 +483,8 @@ let currentStrategy = 'momentum';
 let currentIndex = 0;
 
 const STRATEGY_DESC = {
-  ew: "<b>Equal weight —</b> 1/N across every eligible item. No estimation of return or risk at all; included as the naive-diversification benchmark that mean-variance theory has to beat to be worth using.",
-  sr_expanding: "<b>SR expanding —</b> weight ∝ EWMA mean return ÷ EWMA volatility, per item, renormalized. A per-asset Sharpe heuristic — it never looks at how items move together, only each one's own risk-adjusted return.",
+  ew: "<b>Equal weight —</b> 1/N weight across every eligible item, the benchmark to beat for mean-variance optimization",
+  sr_expanding: "<b>SR expanding —</b> weight ∝ EWMA mean return ÷ EWMA volatility, only looking at each asset's risk-adjusted return.",
   sortino_expanding: "<b>Sortino expanding —</b> same construction as SR, but volatility is replaced with downside-only deviation (EWMA-weighted). Penalizes downside swings without penalizing upside volatility.",
   mvo_expanding: "<b>MVO expanding —</b> the actual Markowitz tangency portfolio: w ∝ Σ⁻¹μ̂, with μ̂ EWMA-weighted and Σ built from pairwise-complete covariance, shrunk toward a scaled identity until its condition number is bounded. The only strategy here that models cross-asset correlation directly.",
   momentum: "<b>Momentum —</b> weight ∝ trailing 26-week cumulative return, positive-momentum items only. A fixed trailing window, deliberately not EWMA or expanding — the point is a pure recent-trend bet, diluting it with older history would defeat the purpose.",
