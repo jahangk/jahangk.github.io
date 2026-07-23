@@ -241,7 +241,7 @@
 
 <header>
   <div class="eyebrow">Portfolio Research — CS2 Item Markets</div>
-  <h1>Supply elasticity, not sophistication, decides whether active management beats buy-and-hold</h1>
+  <h1>Aggregate demand characteristics change whether chasing momentum leads to winners or losers in the CS2 market.</h1>
   <p class="lede">A walk-forward backtest of Modern Portfolio Theory across ~230 CS2 cases and sticker capsules finds the winning strategy flips entirely depending on whether an asset's supply is fixed or ongoing reflective of literature on momentum and equity markets.</p>
   <div class="meta">
     <span>231-asset universe</span>
@@ -297,23 +297,23 @@
 <section>
   <h2>Why cases and capsules diverge</h2>
 
-  <p>The six strategies differ in one specific way across rebalances: some <strong>chase</strong> whatever just went up (momentum re-buys the recent winner every period), some <strong>correct away</strong> from it (equal weight and MVO reset toward a neutral target each time), and the index cap-weight formula happens to passively track organic price drift. Cases reward the chasing rule, capsules punish it and reward the correcting.</p>
+  <p>The six strategies differ in one specific way across rebalances: some <strong>chase</strong> whatever just went up (momentum re-buys the recent winner every period), some <strong>correct away</strong> from it (equal weight and MVO reset toward a neutral target each rebalance), and the index cap-weight formula happens to passively track organic price drift.</p>
 
   <div class="sleeve-cards">
     <div class="sleeve-card cases">
-      <h4>Cases — momentum's mechanism wins</h4>
+      <h4>Cases - momentum's mechanism wins</h4>
       <div class="big mono">Trend persists</div>
       <p>Momentum is the strongest performer here in both raw returns and Sharpe Ratio: "keep buying whatever just won." This strategy pays off if trends genuinely persist, so its win is itself evidence of persistence. Two candidate explanations exist for <em>why</em> it persists: continuous case reissue means price growth isn't fully capped by scarcity, and/or case demand comes from a broad, unsophisticated (and mostly non-investor) player base that underreacts to news, giving a Jegadeesh–Titman-style momentum window.</p>
     </div>
     <div class="sleeve-card capsules">
-      <h4>Capsules — the correcting rule wins</h4>
+      <h4>Capsules - the correcting rule wins</h4>
       <div class="big mono">Trend reverts</div>
-      <p>Momentum is the <em>worst</em> performer in this universe: re-buying recent winners means systematically buying at the tail of tournament-driven hype spikes right before they partially revert. Equal weight actively sells down whatever just spiked and has the best Sharpe ratio of any strategy in either universe. The index portfolio avoids momentum's timing mistake but doesn't correct equal weight either, so it captures a real long-run scarcity trend at the cost of extra volatility from riding out each spike.</p>
+      <p>Momentum is the <em>worst</em> performer in this universe: re-buying recent winners means systematically buying at the tail of tournament-driven hype spikes right before they partially revert. Equal weight actively sells down whatever just spiked and has the best Sharpe ratio of any strategy in either universe. The index portfolio avoids momentum's timing mistake but doesn't correct like equal weight either, so it captures a real long-run scarcity trend at the cost of extra volatility from riding out each spike.</p>
     </div>
   </div>
 
   <div class="callout caveat">
-    <p><strong>Open question, not a settled result:</strong> every case in this dataset has both ongoing supply <em>and</em> real consumption demand (players opening cases); every capsule has both fixed supply <em>and</em> collector/speculative demand. These two factors are confounded — the backtest can't tell you whether cases trend because supply is elastic, because demand is consumption-driven and slow-diffusing, or both. Two tests using data already collected here could help separate them: (1) checking whether cases that have been <em>retired</em> from the active drop pool — meaning their supply is now effectively fixed, same as a capsule — start reverting like capsules despite still being "cases," and (2) checking whether cheap, low-rarity capsules (plausibly bought partly for genuine in-game use) revert less than expensive, purely-collectible ones, despite both having identical fixed supply. Neither test has been run yet.</p>
+    <p><strong>Causality caveat:</strong> every case in this dataset has both ongoing supply <em>and</em> real consumption demand (players opening cases); every capsule has both fixed supply <em>and</em> collector/speculative demand. These two factors are confounded and so we cannot distill whether cases trend because supply is elastic, or because demand is consumption-driven and slow-diffusing, or both. </p>
   </div>
 
   <h3>Mapping to established theory</h3>
@@ -321,21 +321,18 @@
     <div class="theory-cell head">Finding</div>
     <div class="theory-cell head">Theoretical analogue</div>
 
-    <div class="theory-cell"><p>Momentum's chase-the-winner rule wins in cases, is the worst performer in capsules</p></div>
-    <div class="theory-cell"><p>Jegadeesh &amp; Titman (1993) 3–12mo momentum; Daniel &amp; Moskowitz document momentum crashes concentrated in thin, high-volatility regimes — exactly capsules' profile.</p></div>
+    <div class="theory-cell"><p>Momentum's winner chasing rule outperforms in cases, but is the worst performer in capsules</p></div>
+    <div class="theory-cell"><p>Jegadeesh &amp; Titman (1993) 3–12mo momentum; Daniel &amp; Moskowitz document momentum crashes concentrated in thin, high-volatility regimes, such as sticker capsules</p></div>
 
-    <div class="theory-cell"><p>Equal weight's correct-toward-neutral rule has the best Sharpe ratio specifically in the capsule universe</p></div>
-    <div class="theory-cell"><p>Consistent with mean-reversion strategies outperforming in markets where price moves are partly sentiment/overreaction rather than persistent information — the mirror image of the momentum literature above.</p></div>
+    <div class="theory-cell"><p>Equal weight's recorrect-toward-neutral rule has the best Sharpe ratio specifically in the capsule universe</p></div>
+    <div class="theory-cell"><p>Consistent with mean-reversion strategies outperforming in markets where price moves are partly sentiment/overreaction rather than a perfectly competitive market with rational investors.</p></div>
 
     <div class="theory-cell"><p>Index has the highest return <em>and</em> highest volatility in capsules</p></div>
-    <div class="theory-cell"><p>Amihud &amp; Mendelson — illiquidity/concentration premium. A raw-return edge earned via undiversified, uncorrected exposure isn't alpha, it's uncompensated risk.</p></div>
+    <div class="theory-cell"><p>Amihud &amp; Mendelson: illiquidity/concentration premium. Excess returns earned via undiversified, uncorrected exposure is uncompensated risk instead of alpha.</p></div>
 
     <div class="theory-cell"><p>Mean-variance optimization underperforms almost everywhere tested</p></div>
-    <div class="theory-cell"><p>Michaud's "Optimization Enigma" (1989) — MVO is an error maximizer; with ~20 observations against 38–242 assets, estimation noise dominates genuine signal out-of-sample. Also DeMiguel, Garlappi &amp; Uppal (2009): naive 1/N diversification is a surprisingly high bar that optimized strategies routinely fail to clear out-of-sample once estimation error is priced in.</p></div>
-
-    <div class="theory-cell"><p>Fixed-supply assets show boom-then-reversal; whether this is about supply or about who's buying remains untested</p></div>
-    <div class="theory-cell"><p>Alternative-asset literature (fine art, rare coins) attributes this to scarcity itself; behavioral finance (Hong &amp; Stein underreaction/overreaction) attributes similar patterns to the composition of the buyer base. Both are live candidates here, not yet distinguished.</p></div>
-  </div>
+    <div class="theory-cell"><p>Michaud's "Optimization Enigma" (1989): with ~20 observations against 38–242 assets, estimation noise overshadows positive effects. DeMiguel, Garlappi &amp; Uppal (2009): simple 1/N diversification is a high bar that optimized strategies routinely fail to clear once estimation error is accounted for.</p></div>
+ </div>
 </section>
 
 <section>
