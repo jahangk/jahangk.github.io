@@ -258,7 +258,7 @@
 </div>
 
 <header>
-  <div class="eyebrow">Portfolio Research — CS2 Item Markets</div>
+  <div class="eyebrow">Portfolio Research - CS2 Item Markets</div>
   <h1>Aggregate demand characteristics change whether chasing momentum leads to winners or losers in the CS2 market.</h1>
   <p class="lede">A walk-forward backtest of Modern Portfolio Theory across ~230 CS2 cases and sticker capsules finds the winning strategy flips depending on whether an asset's supply is fixed and aggregate demand characteristics, reflective of literature on momentum and equity markets.</p>
   <div class="meta">
@@ -283,37 +283,37 @@
 </section>
 <section class="wide">
   <h2>How each portfolio is constructed</h2>
-  <p>All six strategies rebalance every 26 weeks. Five are solved fresh at each rebalance date from whatever price history is available up to that point; the index is the only one that is genuinely buy-and-hold within a window. Construction and rationale for each, specific to this market, follow.</p>
+  <p>All six strategies rebalance every 26 weeks. Shorting does not exist and so all strategies are long-only. The investable universe consists of 242 types of cases and sticker capsules. Cases are dropped to players from two pools: actively (commonly) and rare (rarely). Cases enter our investable universe when they are moved from the active pool (on release) into the rare drop pool, for simplicity we choose 6 months after their initial release. Sticker capsules are available for purchase from the in-game store and capsules that are sold for finite periods are included after their sale period ends. Note the volume traded for cases far overshadows capsules, and for most serious investors, investment into most capsules would noticeably shift the buying/selling price with their volume.</p>
  
   <h3>Equal weight</h3>
-  <p><strong>Construction:</strong> weight = 1/N across every eligible item at each rebalance date. No return or risk estimation of any kind.</p>
-  <p><strong>Rationale:</strong> serves as the naive-diversification benchmark. With only ~20 rebalance observations against up to 242 assets, this is the bar every more sophisticated strategy below has to clear to justify its added complexity.</p>
+  <p><strong>Construction:</strong> weight = 1/N of the portfolio's holdings is split across every eligible item at each rebalance date.</p>
+  <p><strong>Rationale:</strong> Representative of a naive-diversification benchmark the more sophisticated strategies below have to clear to justify their added complexity.</p>
  
   <h3>Sharpe-weighted (SR expanding)</h3>
-  <p><strong>Construction:</strong> for each item independently, compute an exponentially-weighted mean return and volatility (λ = 0.97, ~23-week half-life) from all history up to the rebalance date. Weight is proportional to mean ÷ volatility, renormalised across items; any item with a non-positive ratio is excluded entirely.</p>
-  <p><strong>Rationale:</strong> a per-asset risk-adjusted heuristic that never looks at how items move together. That's a deliberate simplification given how staggered item entry dates are in this universe — many items don't share a long enough joint price history for a correlation-based approach to be reliable this early.</p>
+  <p><strong>Construction:</strong> for each item, computing an exponentially-weighted mean return and volatility with a smoothing parameter (λ = 0.97, giving a ~23-week half-life) from introduction to the rebalance date. Weight is proportional to mean returns ÷ volatility, and items with a negative sharpe ratio are excluded from the portfolio.</p>
+  <p><strong>Rationale:</strong> Purely looking at risk-adjusted returns for items as many items don't share a long enough joint price history to test correlation based approaches. Caveat: many items included only appreciate in their early lifespan so downwards fluctuations only became common after investors were drawn to the CS market.</p>
  
   <h3>Sortino-weighted</h3>
-  <p><strong>Construction:</strong> identical to the Sharpe-weighted construction, except the denominator is downside semi-deviation — volatility computed only from below-zero return observations — rather than total volatility.</p>
-  <p><strong>Rationale:</strong> distinguishes upside volatility, arguably a feature rather than a risk in a market driven by scarcity-fuelled price rallies, from genuine downside risk.</p>
+  <p><strong>Construction:</strong> identical to the Sharpe-weighted construction, except the risk denominator is computed only from negative return observations.</p>
+  <p><strong>Rationale:</strong> Given the common upwards-only trajectories for items/periods, this distinguishes the plausibly skewed upside volatility from genuine downside risk.</p>
  
   <h3>MVO expanding (Markowitz tangency)</h3>
-  <p><strong>Construction:</strong> the one genuine joint optimisation tested — weights proportional to Σ⁻¹μ̂, where μ̂ is the same EWMA mean vector used above and Σ is built from pairwise-complete covariance (so an item with a data gap doesn't force the whole window to be dropped), masked below a minimum shared-observation threshold, then shrunk toward a scaled-identity target until its condition number is bounded. The unconstrained solution is then clipped to long-only and capped at 40% per item.</p>
-  <p><strong>Rationale:</strong> the only strategy here that models cross-item correlation directly, which is in principle what a genuine diversification benefit requires. But with ~20 non-overlapping observations against 38–242 assets, this is exactly the estimation-error-dominated regime DeMiguel, Garlappi &amp; Uppal (2009) warn optimisation performs worst in — a useful test case, not an obvious favourite.</p>
+  <p><strong>Construction:</strong> the only correlational optimisation tested: weights are proportional to Σ⁻¹μ̂, where μ̂ is the same EWMA mean vector used above and Σ is built from pairwise-complete covariances so gaps in data don't force the whole time window to be dropped.</p>
+  <p><strong>Rationale:</strong> modelling cross-item correlation directly tests the existence of a genuine diversification benefit. But given the limited data: ~20 non-overlapping observations with 38–242 assets, this is the estimation-error substandard performance DeMiguel, Garlappi &amp; Uppal (2009) warns optimisation performs worst in.</p>
  
   <h3>Momentum</h3>
-  <p><strong>Construction:</strong> weight proportional to trailing 26-week cumulative return, among items with positive trailing return only. Deliberately a fixed lookback window rather than EWMA or expanding, since the point is a pure recent-trend signal, not a blended full-history average. Same 40% cap applies.</p>
-  <p><strong>Rationale:</strong> tests whether recent price action predicts near-term continuation — plausible in a market with a large, non-professional, retail-dominated buyer base, where information and sentiment can diffuse slowly rather than being priced in instantly.</p>
+  <p><strong>Construction:</strong> weights are proportional to trailing 26-week cumulative returns, only items with positive trailing returns are included. </p>
+  <p><strong>Rationale:</strong> tests whether recent positive trends can predict following appreciation, plausible in a market with a large non-investor buyer base since information and sentiments may diffuse slowly rather than being instantly priced in.</p>
  
   <h3>Index (cap-weighted, buy-and-hold)</h3>
-  <p><strong>Construction:</strong> weight proportional to (VWAP × trailing volume) at the rebalance date, then held completely fixed for the full holding period — no rebalancing within the window at all.</p>
-  <p><strong>Rationale:</strong> a passive benchmark for what an investor earns simply holding the market as currently priced, weighted toward whichever handful of items dominate trading activity — useful precisely because it has no opinion on trend or reversion, unlike every strategy above it.</p>
+  <p><strong>Construction:</strong> weights proportional to (VWAP × trailing volume)</p>
+  <p><strong>Rationale:</strong> a passive benchmark reflecting a market index. Due to supply information being private, items are weighted on trading volume with no attention paid to trends. </p>
 </section>
  
 <section class="wide">
   <h2>Results by universe</h2>
 
-  <span class="universe-tag tag-cases">Cases only — 38 items</span>
+  <span class="universe-tag tag-cases">Cases only - 38 items</span>
   <table>
     <tr><th>Strategy</th><th>Mean ret.</th><th>Sharpe (ann.)</th><th>Total ret.</th></tr>
     <tr class="best"><td>Momentum</td><td>0.2967</td><td>1.0593</td><td>34.5%</td></tr>
@@ -324,7 +324,7 @@
     <tr class="worst"><td>Index (buy &amp; hold)</td><td>0.2365</td><td>0.9779</td><td>26.7%</td></tr>
   </table>
 
-  <span class="universe-tag tag-capsules">Capsules only — 192 items</span>
+  <span class="universe-tag tag-capsules">Capsules only - 192 items</span>
   <table>
     <tr><th>Strategy</th><th>Mean return (log)</th><th>Sharpe (ann.)</th><th>Avg yearly return</th></tr>
     <tr class="best"><td>Index (buy &amp; hold)</td><td>0.1903</td><td>0.6199</td><td>21.0%</td></tr>
@@ -336,7 +336,7 @@
   </table>
 
   <div class="callout caveat">
-    <p><strong>Note the split in the capsules table.</strong> The index wins on raw return but has the <em>worst</em> Sharpe ratio of all six strategies (0.62) — nearly twice the volatility of equal weight (0.4341 vs 0.2352 std. dev.) for barely more return. Equal weight's 1.0777 Sharpe is the highest of any strategy in this entire study. The index's edge here is compensation for concentration risk, not alpha extracted by portfolio engineering.</p>
+    <p><strong>Note the split in the capsules table.</strong> The index wins on raw return but has the <em>worst</em> Sharpe ratio of all six strategies (0.62) - nearly twice the volatility of equal weight (0.4341 vs 0.2352 std. dev.) for barely more return. Equal weight's 1.0777 Sharpe is the highest of any strategy in this entire study. The index's edge here is compensation for concentration risk, not alpha extracted by portfolio engineering.</p>
   </div>
 </section>
 
@@ -407,7 +407,7 @@
 </section>
 
 <footer>
-  <div>Frank Jake Hang — Bachelor of Commerce (Economics &amp; Finance), University of Melbourne</div>
+  <div>Frank Jake Hang - Bachelor of Commerce (Economics &amp; Finance), University of Melbourne</div>
   <div style="margin-top:8px;">
     <a href="https://jahangk.github.io">jahangk.github.io</a> ·
     <a href="https://github.com/jahangk">GitHub</a> ·
