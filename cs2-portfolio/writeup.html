@@ -260,7 +260,7 @@
 <header>
   <div class="eyebrow">Portfolio Research — CS2 Item Markets</div>
   <h1>Aggregate demand characteristics change whether chasing momentum leads to winners or losers in the CS2 market.</h1>
-  <p class="lede">A walk-forward backtest of Modern Portfolio Theory across ~230 CS2 cases and sticker capsules finds the winning strategy flips entirely depending on whether an asset's supply is fixed or ongoing reflective of literature on momentum and equity markets.</p>
+  <p class="lede">A walk-forward backtest of Modern Portfolio Theory across ~230 CS2 cases and sticker capsules finds the winning strategy flips depending on whether an asset's supply is fixed and aggregate demand characteristics, reflective of literature on momentum and equity markets.</p>
   <div class="meta">
     <span>231-asset universe</span>
     <span>2014–2026</span>
@@ -272,8 +272,8 @@
 <div class="rarity-bar"></div>
 
 <section>
-  <h2>The finding</h2>
-  <p>Six strategies: equal weight, Sharpe-weighted, Sortino-weighted, Markowitz tangency (mean-variance optimization), a trailing-momentum tilt, and a passive cap-weighted index. Strategies were backtested on 6-month forward returns across 20 non-overlapping rebalance windows (2016–2025), on three overlapping universes: all 242 investable items, 38 cases only, and 192 sticker capsules only.</p>
+  <h2>Methodology</h2>
+  <p>Six strategies were tested against each other : equal weight, Sharpe-weighted, Sortino-weighted, Markowitz tangency (mean-variance optimization), a trailing-momentum tilt, and a passive cap-weighted index. Strategies were backtested on 6-month forward returns across 20 non-overlapping rebalance windows (2016–2025) in three overlapping universes: all 242 investable items, 38 cases only, and 192 sticker capsules only.</p>
 
   <div class="callout finding">
     <p><strong>Strategy performance inverts depending on the universe.</strong> The passive index dominates in capsules and the full universe. The momentum portfolio dominates in the cases-only universe.</p>
@@ -281,7 +281,35 @@
   <h2>Introduction into the CS2 Market</h2>
   <p>The CS:GO/CS2 Market is a universe of tradable items, with a large variety of cosmetic items priced through player demand. This study looks at items considered "sensible" investments (items in which supply does not continuously outgrow demand; such as most cosmetic items). Investment culture in the community reflects this: mainly investing in Cases and Capsules, consumable items that disappear when opened and grant the player a random cosmetic item from its specific collection. Cases are randomly dropped whilst playing, sticker capsules are on sale for fixed periods. Cases enter the investable universe once they move from the common to the rare drop pool, and sticker capsules are included after their sale ends. </p>
 </section>
-
+<section class="wide">
+  <h2>How each portfolio is constructed</h2>
+  <p>All six strategies rebalance every 26 weeks. Five are solved fresh at each rebalance date from whatever price history is available up to that point; the index is the only one that is genuinely buy-and-hold within a window. Construction and rationale for each, specific to this market, follow.</p>
+ 
+  <h3>Equal weight</h3>
+  <p><strong>Construction:</strong> weight = 1/N across every eligible item at each rebalance date. No return or risk estimation of any kind.</p>
+  <p><strong>Rationale:</strong> serves as the naive-diversification benchmark. With only ~20 rebalance observations against up to 242 assets, this is the bar every more sophisticated strategy below has to clear to justify its added complexity.</p>
+ 
+  <h3>Sharpe-weighted (SR expanding)</h3>
+  <p><strong>Construction:</strong> for each item independently, compute an exponentially-weighted mean return and volatility (λ = 0.97, ~23-week half-life) from all history up to the rebalance date. Weight is proportional to mean ÷ volatility, renormalised across items; any item with a non-positive ratio is excluded entirely.</p>
+  <p><strong>Rationale:</strong> a per-asset risk-adjusted heuristic that never looks at how items move together. That's a deliberate simplification given how staggered item entry dates are in this universe — many items don't share a long enough joint price history for a correlation-based approach to be reliable this early.</p>
+ 
+  <h3>Sortino-weighted</h3>
+  <p><strong>Construction:</strong> identical to the Sharpe-weighted construction, except the denominator is downside semi-deviation — volatility computed only from below-zero return observations — rather than total volatility.</p>
+  <p><strong>Rationale:</strong> distinguishes upside volatility, arguably a feature rather than a risk in a market driven by scarcity-fuelled price rallies, from genuine downside risk.</p>
+ 
+  <h3>MVO expanding (Markowitz tangency)</h3>
+  <p><strong>Construction:</strong> the one genuine joint optimisation tested — weights proportional to Σ⁻¹μ̂, where μ̂ is the same EWMA mean vector used above and Σ is built from pairwise-complete covariance (so an item with a data gap doesn't force the whole window to be dropped), masked below a minimum shared-observation threshold, then shrunk toward a scaled-identity target until its condition number is bounded. The unconstrained solution is then clipped to long-only and capped at 40% per item.</p>
+  <p><strong>Rationale:</strong> the only strategy here that models cross-item correlation directly, which is in principle what a genuine diversification benefit requires. But with ~20 non-overlapping observations against 38–242 assets, this is exactly the estimation-error-dominated regime DeMiguel, Garlappi &amp; Uppal (2009) warn optimisation performs worst in — a useful test case, not an obvious favourite.</p>
+ 
+  <h3>Momentum</h3>
+  <p><strong>Construction:</strong> weight proportional to trailing 26-week cumulative return, among items with positive trailing return only. Deliberately a fixed lookback window rather than EWMA or expanding, since the point is a pure recent-trend signal, not a blended full-history average. Same 40% cap applies.</p>
+  <p><strong>Rationale:</strong> tests whether recent price action predicts near-term continuation — plausible in a market with a large, non-professional, retail-dominated buyer base, where information and sentiment can diffuse slowly rather than being priced in instantly.</p>
+ 
+  <h3>Index (cap-weighted, buy-and-hold)</h3>
+  <p><strong>Construction:</strong> weight proportional to (VWAP × trailing volume) at the rebalance date, then held completely fixed for the full holding period — no rebalancing within the window at all.</p>
+  <p><strong>Rationale:</strong> a passive benchmark for what an investor earns simply holding the market as currently priced, weighted toward whichever handful of items dominate trading activity — useful precisely because it has no opinion on trend or reversion, unlike every strategy above it.</p>
+</section>
+ 
 <section class="wide">
   <h2>Results by universe</h2>
 
@@ -308,7 +336,7 @@
   </table>
 
   <div class="callout caveat">
-    <p><strong>Note the split in the capsules table.</strong> The index wins on raw return but has the <em>worst</em> Sharpe ratio of all six strategies (0.62) — nearly twice the volatility of equal weight (0.4341 vs 0.2352 std. dev.) for barely more return. Equal weight's 1.0777 Sharpe is the highest of any strategy in this entire study. The index's edge here is compensation for concentration risk, not free alpha.</p>
+    <p><strong>Note the split in the capsules table.</strong> The index wins on raw return but has the <em>worst</em> Sharpe ratio of all six strategies (0.62) — nearly twice the volatility of equal weight (0.4341 vs 0.2352 std. dev.) for barely more return. Equal weight's 1.0777 Sharpe is the highest of any strategy in this entire study. The index's edge here is compensation for concentration risk, not alpha extracted by portfolio engineering.</p>
   </div>
 </section>
 
