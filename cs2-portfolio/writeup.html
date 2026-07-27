@@ -230,6 +230,32 @@
     margin-top:10px;
     text-align:center;
   }
+  .equation{
+    background:var(--surface2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:14px 20px;
+    margin:8px 0 18px;
+    overflow-x:auto;
+  }
+  .equation .eq-line{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14.5px;
+    color:var(--text);
+    text-align:center;
+    margin:5px 0;
+    white-space:nowrap;
+  }
+  .equation .eq-note{
+    display:block;
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    color:var(--text-dim);
+    text-align:left;
+    margin-top:8px;
+    white-space:normal;
+  }
   footer{
     max-width:880px;
     margin:0 auto;
@@ -244,6 +270,7 @@
   @media (max-width:640px){
     .theory-grid,.sleeve-cards{grid-template-columns:1fr;}
     th,td{padding:9px 8px; font-size:12px;}
+    .equation .eq-line{font-size:12px;}
   }
 </style>
 </head>
@@ -284,29 +311,56 @@
 <section class="wide">
   <h2>How each portfolio is constructed</h2>
   <p>All six strategies rebalance every 26 weeks. Shorting does not exist and so all strategies are long-only. The investable universe consists of 242 types of cases and sticker capsules. Cases are dropped to players from two pools: actively (commonly) and rare (rarely). Cases enter our investable universe when they are moved from the active pool (on release) into the rare drop pool, for simplicity we choose 6 months after their initial release. Sticker capsules are available for purchase from the in-game store and capsules that are sold for finite periods are included after their sale period ends. Note the volume traded for cases far overshadows capsules, and for most serious investors, investment into most capsules would noticeably shift the buying/selling price with their volume.</p>
- 
+
   <h3>Equal weight</h3>
   <p><strong>Construction:</strong> weight = 1/N of the portfolio's holdings is split across every eligible item at each rebalance date.</p>
+  <div class="equation">
+    <span class="eq-line">w<sub>i</sub> = 1 / N</span>
+    <span class="eq-note">N = number of eligible items at the rebalance date.</span>
+  </div>
   <p><strong>Rationale:</strong> Representative of a naive-diversification benchmark the more sophisticated strategies below have to clear to justify their added complexity.</p>
- 
+
   <h3>Sharpe-weighted (SR expanding)</h3>
   <p><strong>Construction:</strong> for each item, computing an exponentially-weighted mean return and volatility with a smoothing parameter (λ = 0.97, giving a ~23-week half-life) from introduction to the rebalance date. Weight is proportional to mean returns ÷ volatility, and items with a negative sharpe ratio are excluded from the portfolio.</p>
+  <div class="equation">
+    <span class="eq-line">μ̂<sub>i</sub> = Σ<sub>t</sub> w<sub>t</sub> r<sub>i,t</sub> &nbsp;&nbsp;&nbsp; σ̂<sub>i</sub> = √( Σ<sub>t</sub> w<sub>t</sub> (r<sub>i,t</sub> − μ̂<sub>i</sub>)² )</span>
+    <span class="eq-line">SR<sub>i</sub> = μ̂<sub>i</sub> / σ̂<sub>i</sub> &nbsp;&nbsp;&nbsp; w<sub>i</sub> = max(SR<sub>i</sub>, 0) / Σ<sub>j</sub> max(SR<sub>j</sub>, 0)</span>
+    <span class="eq-note">w<sub>t</sub> = (1 − λ)λ<sup>n−t</sup> / Σ<sub>s</sub>(1 − λ)λ<sup>n−s</sup>, the EWMA weight on observation t of n. Items with SR<sub>i</sub> ≤ 0 receive zero weight.</span>
+  </div>
   <p><strong>Rationale:</strong> Purely looking at risk-adjusted returns for items as many items don't share a long enough joint price history to test correlation based approaches. Caveat: many items included only appreciate in their early lifespan so downwards fluctuations only became common after investors were drawn to the CS market.</p>
- 
+
   <h3>Sortino-weighted</h3>
   <p><strong>Construction:</strong> identical to the Sharpe-weighted construction, except the risk denominator is computed only from negative return observations.</p>
+  <div class="equation">
+    <span class="eq-line">DD<sub>i</sub> = √( Σ<sub>t</sub> w<sub>t</sub> min(r<sub>i,t</sub>, 0)² )</span>
+    <span class="eq-line">Sortino<sub>i</sub> = μ̂<sub>i</sub> / DD<sub>i</sub> &nbsp;&nbsp;&nbsp; w<sub>i</sub> = Sortino<sub>i</sub> / Σ<sub>j</sub> Sortino<sub>j</sub> &nbsp; (μ̂<sub>i</sub> &gt; 0 only)</span>
+    <span class="eq-note">DD<sub>i</sub> (downside deviation) only accumulates weight from below-zero return observations, unlike σ̂<sub>i</sub> above.</span>
+  </div>
   <p><strong>Rationale:</strong> Given the common upwards-only trajectories for items/periods, this distinguishes the plausibly skewed upside volatility from genuine downside risk.</p>
- 
+
   <h3>MVO expanding (Markowitz tangency)</h3>
   <p><strong>Construction:</strong> the only correlational optimisation tested: weights are proportional to Σ⁻¹μ̂, where μ̂ is the same EWMA mean vector used above and Σ is built from pairwise-complete covariances so gaps in data don't force the whole time window to be dropped.</p>
+  <div class="equation">
+    <span class="eq-line">z = Σ<sub>shrunk</sub><sup>−1</sup> μ̂ &nbsp;&nbsp;&nbsp; z<sub>i</sub> ← max(z<sub>i</sub>, 0) &nbsp;&nbsp;&nbsp; w<sub>i</sub> = z<sub>i</sub> / Σ<sub>j</sub> z<sub>j</sub></span>
+    <span class="eq-line">Σ<sub>shrunk</sub> = (1 − α)Σ̂ + α·σ̄²I</span>
+    <span class="eq-note">Σ̂ is the pairwise-complete sample covariance; α is chosen by bisection so that the condition number κ(Σ<sub>shrunk</sub>) stays below a fixed ceiling. The unconstrained z is long-only and renormalised.</span>
+  </div>
   <p><strong>Rationale:</strong> modelling cross-item correlation directly tests the existence of a genuine diversification benefit. But given the limited data: ~20 non-overlapping observations with 38–242 assets, this is the estimation-error substandard performance DeMiguel, Garlappi &amp; Uppal (2009) warns optimisation performs worst in.</p>
- 
+
   <h3>Momentum</h3>
   <p><strong>Construction:</strong> weights are proportional to trailing 26-week cumulative returns, only items with positive trailing returns are included. </p>
+  <div class="equation">
+    <span class="eq-line">M<sub>i</sub> = Σ<sub>t = T−26</sub><sup>T</sup> r<sub>i,t</sub> &nbsp;&nbsp;&nbsp; w<sub>i</sub> = M<sub>i</sub> / Σ<sub>j</sub> M<sub>j</sub> &nbsp; (M<sub>i</sub> &gt; 0 only)</span>
+    <span class="eq-note">A fixed 26-week window, not EWMA-weighted or expanding - M<sub>i</sub> is a plain sum of the last 26 weekly log returns, weighting is by magnitude of trailing return.</span>
+  </div>
   <p><strong>Rationale:</strong> tests whether recent positive trends can predict following appreciation, plausible in a market with a large non-investor buyer base since information and sentiments may diffuse slowly rather than being instantly priced in.</p>
- 
+
   <h3>Index (cap-weighted, buy-and-hold)</h3>
   <p><strong>Construction:</strong> weights proportional to (VWAP × trailing volume)</p>
+  <div class="equation">
+    <span class="eq-line">w<sub>i</sub> = (P<sub>i</sub> · V<sub>i</sub>) / Σ<sub>j</sub> (P<sub>j</sub> · V<sub>j</sub>)</span>
+    <span class="eq-note">P<sub>i</sub> = VWAP at the rebalance date, V<sub>i</sub> = trailing traded volume, used as a market-capitalisation proxy since true circulating supply per item isn't observable. Weights are fixed for the full holding period.</span>
+  </div>
   <p><strong>Rationale:</strong> a passive benchmark reflecting a market index. Due to supply information being private, items are weighted on trading volume with no attention paid to trends. </p>
 </section>
  
@@ -315,7 +369,7 @@
 
   <span class="universe-tag tag-cases">Cases only - 38 items</span>
   <table>
-    <tr><th>Strategy</th><th>Mean ret.</th><th>Sharpe (ann.)</th><th>Total ret.</th></tr>
+    <tr><th>Strategy</th><th>Mean return (log)</th><th>Sharpe (ann.)</th><th>Avg yearly return</th></tr>
     <tr class="best"><td>Momentum</td><td>0.2967</td><td>1.0593</td><td>34.5%</td></tr>
     <tr><td>MVO expanding</td><td>0.2572</td><td>1.0354</td><td>29.3%</td></tr>
     <tr><td>Sortino expanding</td><td>0.2555</td><td>1.0637</td><td>29.1%</td></tr>
